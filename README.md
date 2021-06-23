@@ -1,7 +1,12 @@
 
-# myapp
+# Bayesian workflow
 
-Template for Python package with Poetry.
+Examples for the Bayesian workflow.
+
+ref)
+
+* A. Gelman et al., ["Bayesian Workflow"](https://arxiv.org/abs/2011.01808)
+* J. Garby et al., ["Visualization in Bayesian workflow"](https://arxiv.org/abs/1709.01449)
 
 # Setup
 

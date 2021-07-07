@@ -10,7 +10,7 @@ from tqdm import tqdm
 class Lasso:
     beta: np.ndarray
     sigma_2: np.ndarray
-    lmbda: np.ndarray
+    lmbda_2: np.ndarray
     u_inv: np.ndarray
 
 
@@ -35,14 +35,14 @@ def gibbs_sampling(
 
     lmbda_a = 1
     lmbda_b = 1
-    lmbda = 1
+    lmbda_2 = 1
 
     u_inv = np.ones(p)
     mat_x = x.T @ x
 
     sample_beta = np.zeros((n_steps + burn_in, p))
     sample_sigma_2 = np.zeros((n_steps + burn_in, 1))
-    sample_lmbda = np.zeros((n_steps + burn_in, 1))
+    sample_lmbda_2 = np.zeros((n_steps + burn_in, 1))
     sample_u_inv = np.zeros((n_steps + burn_in, p))
 
     for i in tqdm(range(n_steps + burn_in)):
@@ -56,18 +56,16 @@ def gibbs_sampling(
         )
         sample_sigma_2[i] = sigma_2
 
-        u_inv = invgauss.rvs(
-            np.sqrt(lmbda ** 2 * sigma_2 / beta ** 2) / lmbda ** 2, scale=lmbda ** 2
-        )
+        u_inv = invgauss.rvs(np.sqrt(lmbda_2 * sigma_2 / beta ** 2) / lmbda_2, scale=lmbda_2)
         sample_u_inv[i] = u_inv
 
-        lmbda = gamma.rvs(lmbda_a + p, scale=1 / (lmbda_b + (1 / u_inv).sum() / 2))
-        sample_lmbda[i] = lmbda
+        lmbda_2 = gamma.rvs(lmbda_a + p, scale=1 / (lmbda_b + (1 / u_inv).sum() / 2))
+        sample_lmbda_2[i] = lmbda_2
 
     posterior_samples = {
         "beta": sample_beta[-n_steps:],
         "sigma_2": sample_sigma_2[-n_steps:],
-        "lmbda": sample_lmbda[-n_steps:],
+        "lmbda_2": sample_lmbda_2[-n_steps:],
         "u_inv": sample_u_inv[-n_steps:],
     }
 

@@ -27,7 +27,7 @@ def gibbs_sampling(
 
     x = np.concatenate([np.ones(x.shape[0])[:, None], x], axis=1)
     n, p = x.shape
-    beta = (linalg.inv(x.T @ x) @ x.T @ y).ravel() + np.random.rand(p)
+    beta = (linalg.inv(x.T @ x) @ x.T @ y).ravel()
 
     sigma_a = 1
     sigma_b = 1
